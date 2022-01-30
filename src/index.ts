@@ -1,7 +1,7 @@
 import { Request, Route, Options } from "FlyingRouter";
 import HTTPMethods from "./library/enums/HTTPMethods";
 import Router from "./library/Router";
-import { pathToRegexp } from "path-to-regexp";
+import { pathToRegexp, match } from "path-to-regexp";
 
 export default class FlyingRouter<REQ, RES> extends Router<REQ, RES> {
   private map: Map<RegExp, Route<REQ, RES>> = new Map();
@@ -13,21 +13,22 @@ export default class FlyingRouter<REQ, RES> extends Router<REQ, RES> {
   }
 
   public handle(req: REQ, res: RES, method: HTTPMethods|null, url: string) {
+    let split = url.split(/\?/);
+    url = split[0];
     let newReq: Request<REQ> = {
       org: req,
       params: {},
       query: () => {
         let query: {[k: string]: string} = {};
         //Parsing Query parameters
-        //TODO: Improve
-        url
-          .split(/\?/)[1]
-          ?.split(/&/g)
-          .forEach((qp) => {
-            let split = qp.split(/=/);
-    
-            query[split[0]||""] = split[1]||"";
-          });
+        let queryParameters = split[1]?.split(/&/g);
+
+        if(query) {
+          for(let param in queryParameters) {
+            let temp = queryParameters[param].split(/=/);
+            query[temp[0]||""] = temp[1]||"";
+          }
+        }
 
         return query;
       }
@@ -35,7 +36,8 @@ export default class FlyingRouter<REQ, RES> extends Router<REQ, RES> {
 
     for (const [pathRegExp, routeObj] of this.map.entries()) {
       if (routeObj.method === method && pathRegExp.exec(url)) {
-        newReq.params = {};
+        let params = match(routeObj.fullPath, { decode: decodeURIComponent });
+        newReq.params = (params(url) as any).params;
 
         routeObj.handler(newReq, res);
 
@@ -55,6 +57,7 @@ export default class FlyingRouter<REQ, RES> extends Router<REQ, RES> {
 
     for(const [path, routeObj] of this.calcRoutesForRouter(this)) {
       returnMap.set(pathToRegexp(path), routeObj);
+      routeObj.fullPath = path;
     }
 
     this.map = returnMap;

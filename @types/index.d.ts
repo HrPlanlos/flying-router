@@ -9,7 +9,8 @@ declare module "FlyingRouter" {
     method: import ("../src/library/enums/HTTPMethods"),
     handler: RouteHandler<REQ, RES>,
     path: string,
-    pathRegExp: RegExp
+    pathRegExp: RegExp,
+    fullPath: string
   }
 
   interface Request<REQ> {
