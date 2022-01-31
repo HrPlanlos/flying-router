@@ -43,7 +43,8 @@ export default class Router<REQ, RES> {
       handler: handler,
       method: method,
       path: path,
-      pathRegExp: pathToRegexp(path)
+      pathRegExp: pathToRegexp(path),
+      fullPath: ""
     });
   }
 }

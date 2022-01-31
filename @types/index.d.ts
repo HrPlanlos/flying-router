@@ -1,7 +1,7 @@
 declare module "FlyingRouter" {
-  type RouteHandler<REQ, RES> = (req: FlyingRequest<REQ>, res: RES) => void;
+  type RouteHandler<REQ, RES> = (req: Request<REQ>, res: RES) => void;
 
-  interface Options {
+  interface Options<REQ, RES> {
     noMatchResponse?: RouteHandler<REQ, RES>
   }
 
@@ -9,7 +9,8 @@ declare module "FlyingRouter" {
     method: import ("../src/library/enums/HTTPMethods"),
     handler: RouteHandler<REQ, RES>,
     path: string,
-    pathRegExp: RegExp
+    pathRegExp: RegExp,
+    fullPath: string
   }
 
   interface Request<REQ> {
