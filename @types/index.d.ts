@@ -1,7 +1,7 @@
 declare module "FlyingRouter" {
-  type RouteHandler<REQ, RES> = (req: FlyingRequest<REQ>, res: RES) => void;
+  type RouteHandler<REQ, RES> = (req: Request<REQ>, res: RES) => void;
 
-  interface Options {
+  interface Options<REQ, RES> {
     noMatchResponse?: RouteHandler<REQ, RES>
   }
 

@@ -5,9 +5,9 @@ import { pathToRegexp, match } from "path-to-regexp";
 
 export default class FlyingRouter<REQ, RES> extends Router<REQ, RES> {
   private map: Map<RegExp, Route<REQ, RES>> = new Map();
-  private _options: Options;
+  private _options: Options<REQ, RES>;
 
-  constructor(options?: Options) {
+  constructor(options?: Options<REQ, RES>) {
     super();
     this._options = options || {};
   }
