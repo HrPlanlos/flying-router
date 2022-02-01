@@ -104,3 +104,5 @@ export default class FlyingRouter<REQ, RES> extends Router<REQ, RES> {
     return finalString;
   }
 }
+
+module.exports = FlyingRouter;
