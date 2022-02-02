@@ -19,4 +19,5 @@ export function methodFromString(str: any): HTTPMethods | null {
 
 export default HTTPMethods;
 module.exports = HTTPMethods;
+export const getMethodFromString = methodFromString;
 module.exports.methodFromString = methodFromString;
