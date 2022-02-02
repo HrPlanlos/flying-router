@@ -49,4 +49,5 @@ export default class Router<REQ, RES> {
   }
 }
 
+exports.default = Router;
 module.exports = Router;

@@ -105,8 +105,13 @@ export default class FlyingRouter<REQ, RES> extends Router<REQ, RES> {
   }
 }
 
+exports.default = FlyingRouter;
 module.exports = FlyingRouter;
+
 export const router = Router;
-module.exports.router = require('./library/Router');
+exports.router = Router
+module.exports.router = Router;
+
 export const httpMethods = HTTPMethods;
-module.exports.HTTPMethods = require('./library/enums/HTTPMethods');
+exports.httpMethods = HTTPMethods;
+module.exports.httpMethods = HTTPMethods;
