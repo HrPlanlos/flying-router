@@ -105,5 +105,9 @@
     "node_modules",
     "examples",
     "dist"
+  ],
+  "include": [
+    "@types",
+    "src/**/*"
   ]
 }
