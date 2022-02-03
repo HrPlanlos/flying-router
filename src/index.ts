@@ -1,4 +1,4 @@
-import HTTPMethods, { methodFromString } from "./library/enums/HTTPMethods";
+import HTTPMethods from "./library/enums/HTTPMethods";
 import Router from "./library/Router";
 import { pathToRegexp, match } from "path-to-regexp";
 import routeHandler, { Route as route } from "./library/RouteHandler";
@@ -36,7 +36,7 @@ export default class FlyingRouter<REQ, RES> extends Router<REQ, RES> {
     };
 
     for (const [pathRegExp, routeObj] of this.map.entries()) {
-      if (routeObj.method === methodFromString(method) && pathRegExp.exec(url)) {
+      if (routeObj.method === this.methodFromString(method) && pathRegExp.exec(url)) {
         let params = match(routeObj.fullPath, { decode: decodeURIComponent });
         newReq.params = (params(url) as any).params;
 
@@ -103,6 +103,17 @@ export default class FlyingRouter<REQ, RES> extends Router<REQ, RES> {
     }
 
     return finalString;
+  }
+
+  private methodFromString(str: any): HTTPMethods | null {
+    switch(str) {
+      case 'GET': return HTTPMethods.GET;
+      case 'PUT': return HTTPMethods.PUT;
+      case 'POST': return HTTPMethods.POST;
+      case 'PATCH': return HTTPMethods.PATCH;
+      case 'DELETE': return HTTPMethods.DELETE;
+      default: return null;
+    }
   }
 }
 
