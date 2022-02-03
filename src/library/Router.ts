@@ -1,8 +1,6 @@
-//TODO: Re-Implement Router
-
-import { Route, RouteHandler } from "FlyingRouter";
 import HTTPMethods from "./enums/HTTPMethods";
 import { pathToRegexp } from "path-to-regexp";
+import RouteHandler, { Route } from "./RouteHandler";
 
 export default class Router<REQ, RES> {
   private _path: string = "";

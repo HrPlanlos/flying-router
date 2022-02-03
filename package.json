@@ -6,7 +6,8 @@
   "scripts": {
     "start:dev": "nodemon",
     "start:ts": "ts-node --files ./src",
-    "build": "tsc"
+    "build:win": "del /F /S dist && tsc",
+    "build:unix": "rm -rf dist && tsc"
   },
   "author": "",
   "license": "MIT",

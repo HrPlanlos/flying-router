@@ -1,8 +1,10 @@
-import { methodFromString } from "../src/library/enums/HTTPMethods";
-import { Options, Request } from "FlyingRouter";
+// TODO: Add example
 
-let options: Options = {
-  noMatchResponse: (req: Request<string>, res: string) => {
-    
-  }
+import { Options } from '../src';
+import Request from '../src/library/Request';
+
+let options: Options<string, string> = {
+  noMatchResponse: (req: Request<string>, res: string): void => {
+    res = req.org.toUpperCase();
+  },
 }

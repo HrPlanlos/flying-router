@@ -1,10 +1,11 @@
-import { Request, Route, Options } from "FlyingRouter";
-import HTTPMethods from "./library/enums/HTTPMethods";
+import HTTPMethods, { methodFromString } from "./library/enums/HTTPMethods";
 import Router from "./library/Router";
 import { pathToRegexp, match } from "path-to-regexp";
+import routeHandler, { Route as route } from "./library/RouteHandler";
+import Req from "./library/Request";
 
 export default class FlyingRouter<REQ, RES> extends Router<REQ, RES> {
-  private map: Map<RegExp, Route<REQ, RES>> = new Map();
+  private map: Map<RegExp, route<REQ, RES>> = new Map();
   private _options: Options<REQ, RES>;
 
   constructor(options?: Options<REQ, RES>) {
@@ -12,10 +13,10 @@ export default class FlyingRouter<REQ, RES> extends Router<REQ, RES> {
     this._options = options || {};
   }
 
-  public handle(req: REQ, res: RES, method: HTTPMethods|null, url: string) {
+  public handle(req: REQ, res: RES, method: string, url: string) {
     let split = url.split(/\?/);
     url = split[0];
-    let newReq: Request<REQ> = {
+    let newReq: Req<REQ> = {
       org: req,
       params: {},
       query: () => {
@@ -35,7 +36,7 @@ export default class FlyingRouter<REQ, RES> extends Router<REQ, RES> {
     };
 
     for (const [pathRegExp, routeObj] of this.map.entries()) {
-      if (routeObj.method === method && pathRegExp.exec(url)) {
+      if (routeObj.method === methodFromString(method) && pathRegExp.exec(url)) {
         let params = match(routeObj.fullPath, { decode: decodeURIComponent });
         newReq.params = (params(url) as any).params;
 
@@ -53,7 +54,7 @@ export default class FlyingRouter<REQ, RES> extends Router<REQ, RES> {
   }
 
   public calcRoutes() {
-    let returnMap: Map<RegExp, Route<REQ, RES>> = new Map();
+    let returnMap: Map<RegExp, route<REQ, RES>> = new Map();
 
     for(const [path, routeObj] of this.calcRoutesForRouter(this)) {
       returnMap.set(pathToRegexp(path), routeObj);
@@ -63,8 +64,8 @@ export default class FlyingRouter<REQ, RES> extends Router<REQ, RES> {
     this.map = returnMap;
   }
 
-  private calcRoutesForRouter(root: Router<REQ, RES>, parentPath?: string): Map<string, Route<REQ, RES>> {
-    let routes: Map<string, Route<REQ, RES>> = new Map();
+  private calcRoutesForRouter(root: Router<REQ, RES>, parentPath?: string): Map<string, route<REQ, RES>> {
+    let routes: Map<string, route<REQ, RES>> = new Map();
 
     if(!parentPath) {
       for(let handler of root.handlers) {
@@ -105,12 +106,20 @@ export default class FlyingRouter<REQ, RES> extends Router<REQ, RES> {
   }
 }
 
+export interface Options<REQ, RES> {
+  noMatchResponse?: routeHandler<REQ, RES>
+}
+
 exports.default = FlyingRouter;
 module.exports = FlyingRouter;
 
 export const router = Router;
-exports.router = Router
+exports.router = Router;
 module.exports.router = Router;
+
+export type Request<REQ> = Req<REQ>;
+export type RouteHandler<REQ, RES> = routeHandler<REQ, RES>;
+export type Route<REQ, RES> = route<REQ, RES>;
 
 export const httpMethods = HTTPMethods;
 exports.httpMethods = HTTPMethods;
