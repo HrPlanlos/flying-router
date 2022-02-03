@@ -132,6 +132,6 @@ export type Request<REQ> = Req<REQ>;
 export type RouteHandler<REQ, RES> = routeHandler<REQ, RES>;
 export type Route<REQ, RES> = route<REQ, RES>;
 
-export const httpMethods = HTTPMethods;
-exports.httpMethods = HTTPMethods;
-module.exports.httpMethods = HTTPMethods;
+export const HttpMethods = HTTPMethods;
+exports.HttpMethods = HTTPMethods;
+module.exports.HttpMethods = HTTPMethods;
