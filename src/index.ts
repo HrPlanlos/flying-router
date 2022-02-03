@@ -1,10 +1,10 @@
 import HTTPMethods from "./library/enums/HTTPMethods";
-import Router from "./library/Router";
+import router from "./library/Router";
 import { pathToRegexp, match } from "path-to-regexp";
 import routeHandler, { Route as route } from "./library/RouteHandler";
 import Req from "./library/Request";
 
-export default class FlyingRouter<REQ, RES> extends Router<REQ, RES> {
+export default class FlyingRouter<REQ, RES> extends router<REQ, RES> {
   private map: Map<RegExp, route<REQ, RES>> = new Map();
   private _options: Options<REQ, RES>;
 
@@ -64,7 +64,7 @@ export default class FlyingRouter<REQ, RES> extends Router<REQ, RES> {
     this.map = returnMap;
   }
 
-  private calcRoutesForRouter(root: Router<REQ, RES>, parentPath?: string): Map<string, route<REQ, RES>> {
+  private calcRoutesForRouter(root: router<REQ, RES>, parentPath?: string): Map<string, route<REQ, RES>> {
     let routes: Map<string, route<REQ, RES>> = new Map();
 
     if(!parentPath) {
@@ -124,9 +124,9 @@ export interface Options<REQ, RES> {
 exports.default = FlyingRouter;
 module.exports = FlyingRouter;
 
-export const router = Router;
-exports.router = Router;
-module.exports.router = Router;
+export const Router = router;
+exports.Router = router;
+module.exports.Router = router;
 
 export type Request<REQ> = Req<REQ>;
 export type RouteHandler<REQ, RES> = routeHandler<REQ, RES>;
